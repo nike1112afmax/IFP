@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IFP 技術問題標準化回報表單 v5.0</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft JhengHei',sans-serif;background:#f5f5f3;color:#1a1a1a;font-size:14px;line-height:1.6}
+.page{max-width:720px;margin:32px auto;padding:0 16px 48px}
+.header{background:#fff;border:1px solid #e0dfd8;border-radius:12px;padding:24px 28px;margin-bottom:16px}
+.header-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.badge{font-size:11px;font-weight:600;background:#e6f1fb;color:#185fa5;padding:3px 10px;border-radius:6px;letter-spacing:.4px}
+.badge-gray{background:#f1efe8;color:#5f5e5a}
+.title{font-size:22px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
+.subtitle{font-size:13px;color:#5f5e5a;line-height:1.5}
+.section{background:#fff;border:1px solid #e0dfd8;border-radius:12px;margin-bottom:12px;overflow:hidden}
+.section-header{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid #f0ede6;background:#fafaf8}
+.section-icon{font-size:16px;color:#888780}
+.section-title{font-size:14px;font-weight:600;color:#1a1a1a;flex:1}
+.sbadge{font-size:11px;padding:2px 9px;border-radius:5px;font-weight:500}
+.sbadge-req{background:#faeeda;color:#854f0b}
+.sbadge-opt{background:#f1efe8;color:#5f5e5a}
+.fields{padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field.full{grid-column:1/-1}
+label{font-size:12px;font-weight:600;color:#5f5e5a;display:flex;align-items:center;gap:4px}
+.req{color:#e24b4a;font-size:11px}
+input[type=text],input[type=number],select,textarea{font-size:13px;color:#1a1a1a;background:#fafaf8;border:1px solid #d3d1c7;border-radius:7px;padding:7px 11px;width:100%;outline:none;font-family:inherit;transition:border-color .15s}
+input[type=text]:focus,input[type=number]:focus,select:focus,textarea:focus{border-color:#378add;box-shadow:0 0 0 3px rgba(55,138,221,.12)}
+textarea{resize:vertical;min-height:76px;line-height:1.5}
+.cb-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.cb-item{display:flex;align-items:center;gap:5px;font-size:12px;color:#1a1a1a;background:#fafaf8;border:1px solid #d3d1c7;border-radius:6px;padding:5px 10px;cursor:pointer;user-select:none;transition:border-color .15s}
+.cb-item:hover{border-color:#888780}
+.cb-item input[type=checkbox]{width:13px;height:13px;accent-color:#378add;cursor:pointer;flex-shrink:0}
+.note{font-size:11px;color:#888780;margin-top:3px}
+.hint{font-size:11px;color:#888780;font-style:italic;margin-top:3px}
+.divider{height:1px;background:#f0ede6;margin:4px 0}
+.sub-block{display:none;flex-direction:column;gap:8px;margin-top:6px;background:#fafaf8;border:1px solid #e0dfd8;border-radius:8px;padding:12px}
+.sub-label{font-size:12px;font-weight:600;color:#5f5e5a;margin-bottom:2px}
+.wifi-block{display:none;flex-direction:column;gap:8px;background:#f5f5f3;border:1px solid #e0dfd8;border-radius:8px;padding:12px;margin-top:6px}
+.mdm-block{display:none;flex-direction:column;gap:8px;background:#f5f5f3;border:1px solid #e0dfd8;border-radius:8px;padding:12px;margin-top:6px}
+.wifi-block-title{font-size:12px;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:6px}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.cat-card{border:1px solid #d3d1c7;border-radius:8px;padding:12px 14px;cursor:pointer;background:#fafaf8;transition:border-color .15s,background .15s}
+.cat-card:hover{border-color:#888780;background:#f1efe8}
+.cat-card.selected{border:2px solid #378add;background:#e6f1fb}
+.cat-card-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:3px}
+.cat-card.selected .cat-card-title{color:#185fa5}
+.cat-card-desc{font-size:11px;color:#5f5e5a;line-height:1.4}
+.cat-required-hint{font-size:11px;color:#e24b4a;display:none;margin-top:5px}
+.checklist-table{width:100%;border-collapse:collapse;font-size:13px}
+.checklist-table td{padding:6px 8px;border-bottom:1px solid #f0ede6;color:#1a1a1a;vertical-align:middle}
+.checklist-table tr:last-child td{border-bottom:none}
+.checklist-table td:first-child{width:24px}
+.level-badge{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:500}
+.lv-l1{background:#eaf3de;color:#3b6d11}
+.lv-l2{background:#e6f1fb;color:#185fa5}
+.lv-both{background:#eeedfe;color:#3c3489}
+.footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;background:#fafaf8;border-top:1px solid #e0dfd8;border-radius:0 0 12px 12px;flex-wrap:wrap}
+.footer-note{font-size:11px;color:#888780;flex:1;min-width:200px}
+.btns{display:flex;gap:8px}
+.btn{font-size:13px;font-weight:500;padding:8px 20px;border-radius:7px;border:1px solid #d3d1c7;background:#fff;color:#1a1a1a;cursor:pointer;transition:background .15s}
+.btn:hover{background:#f1efe8}
+.btn-primary{background:#378add;color:#fff;border-color:#378add}
+.btn-primary:hover{background:#185fa5;border-color:#185fa5}
+.copy-box{background:#fafaf8;border:1px solid #e0dfd8;border-radius:8px;padding:14px 16px;font-size:12px;color:#5f5e5a;font-family:'Courier New',monospace;white-space:pre-wrap;display:none;margin-top:12px;line-height:1.7;max-height:500px;overflow-y:auto}
+.copy-row{display:none;align-items:center;margin-top:8px;gap:8px}
+.copied-msg{font-size:12px;color:#3b6d11;display:none}
+@media(max-width:520px){
+  .row{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:1fr}
+  .footer{flex-direction:column;align-items:stretch}
+  .btns{justify-content:flex-end}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <div class="header-top">
+    <span class="badge">L1 / L2 → BU FAE</span>
+    <span class="badge badge-gray">IFP 產品</span>
+    <span class="badge badge-gray">v5.0</span>
+  </div>
+  <div class="title">技術問題標準化回報表單</div>
+  <div class="subtitle">填寫完成後點擊「產生 Email 內容」，複製貼至郵件發送給 BU FAE。<br>標記 <span style="color:#e24b4a">*</span> 為必填欄位。</div>
+</div>
+
+<!-- A -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">A.&nbsp; 機器基本資訊</span>
+    <span class="sbadge sbadge-req">必填</span>
+  </div>
+  <div class="fields">
+    <div class="row">
+      <div class="field"><label>Model Name / P/N <span class="req">*</span></label><input type="text" id="model" placeholder="e.g. IFP7550-3"/></div>
+      <div class="field"><label>Serial Number (S/N) <span class="req">*</span></label><input type="text" id="sn" placeholder="機身序號"/></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>FW 版本 <span class="req">*</span></label><input type="text" id="fw" placeholder="e.g. 1.0.2.3_20240101"/></div>
+      <div class="field"><label>Android 版本 / OS Build</label><input type="text" id="os" placeholder="e.g. Android 11"/></div>
+    </div>
+    <div class="divider"></div>
+    <div class="row">
+      <div class="field"><label>學校 / 公司名稱</label><input type="text" id="location" placeholder="安裝地點名稱"/></div>
+      <div class="field"><label>問題發生的國家與城市</label><input type="text" id="region" placeholder="e.g. Japan, Tokyo"/></div>
+    </div>
+    <div class="divider"></div>
+    <div class="field full">
+      <label>影響台數 <span class="req">*</span></label>
+      <textarea id="unit_count" style="min-height:60px" placeholder="請直接貼上或輸入，例如：&#10;共 3 台，S/N: ABC123、ABC124、ABC125&#10;或：全班 40 台均有此現象"></textarea>
+      <span class="note">可直接貼上多台序號列表，或描述影響範圍</span>
+    </div>
+  </div>
+</div>
+
+<!-- B -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">B.&nbsp; 客戶環境資訊</span>
+    <span class="sbadge sbadge-opt">選填</span>
+  </div>
+  <div class="fields">
+    <div class="row">
+      <div class="field">
+        <label>安裝場景</label>
+        <select id="scene">
+          <option value="">請選擇</option>
+          <option>學校</option><option>會議室</option><option>室內商場</option><option>戶外空間</option><option>其他</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>安裝方式</label>
+        <select id="install">
+          <option value="">請選擇</option>
+          <option>壁掛</option><option>移動式腳架</option><option>其他</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>電源規格</label>
+        <select id="power" onchange="togglePowerOther(this.value)">
+          <option value="">請選擇</option>
+          <option value="110V">110V</option>
+          <option value="220V">220V</option>
+          <option value="other">其他</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>OPS 型號</label>
+        <input type="text" id="ops" placeholder="有無 OPS / 型號名稱"/>
+      </div>
+    </div>
+    <div id="power-other-row" style="display:none" class="field full">
+      <label>其他電源規格</label>
+      <input type="text" id="power_other" placeholder="e.g. 240V/50Hz"/>
+    </div>
+    <div class="field full">
+      <label>外接設備清單</label>
+      <input type="text" id="periph" placeholder="e.g. HDMI 電腦, USB 攝影機, USB-C Hub..."/>
+    </div>
+    <div class="field full">
+      <label>網路環境</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="net_eth"/> 有線 Ethernet</label>
+        <label class="cb-item"><input type="checkbox" id="net_wifi" onchange="toggleWifi()"/> Wi-Fi</label>
+        <label class="cb-item"><input type="checkbox" id="net_none"/> 無網路</label>
+        <label class="cb-item"><input type="checkbox" id="net_mdm" onchange="toggleMdm()"/> MDM 管理</label>
+        <label class="cb-item"><input type="checkbox" id="net_proxy"/> 企業 Proxy</label>
+        <label class="cb-item"><input type="checkbox" id="net_fw"/> 防火牆限制</label>
+      </div>
+
+      <div id="wifi-detail" class="wifi-block">
+        <div class="wifi-block-title">&#x1F4F6; Wi-Fi 詳細資訊</div>
+        <div class="row">
+          <div class="field">
+            <label>Wi-Fi 型號</label>
+            <select id="wifi_model" onchange="toggleWifiOther(this.value)">
+              <option value="">請選擇</option>
+              <option value="LB-WIFI-001">LB-WIFI-001</option>
+              <option value="VB-WIFI-001">VB-WIFI-001</option>
+              <option value="VB-WIFI-003">VB-WIFI-003</option>
+              <option value="VB-WIFI-004">VB-WIFI-004</option>
+              <option value="VB-WIFI-005">VB-WIFI-005</option>
+              <option value="VB-WIFI-006">VB-WIFI-006</option>
+              <option value="VSB-050">VSB-050</option>
+              <option value="other">其他（自行輸入）</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Wi-Fi 頻段</label>
+            <select id="wifi_band">
+              <option value="">請選擇</option>
+              <option>2.4 GHz</option><option>5 GHz</option>
+              <option>2.4 &amp; 5 GHz 雙頻</option><option>6 GHz (Wi-Fi 6E)</option>
+            </select>
+          </div>
+        </div>
+        <div id="wifi-other-row" style="display:none" class="field">
+          <label>其他 Wi-Fi 型號</label>
+          <input type="text" id="wifi_other" placeholder="請輸入型號或描述"/>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>AP / Router 品牌型號</label>
+            <input type="text" id="ap_model" placeholder="e.g. Cisco Meraki MR36"/>
+          </div>
+          <div class="field">
+            <label>IP 取得方式</label>
+            <select id="ip_mode">
+              <option value="">請選擇</option>
+              <option>DHCP 自動</option><option>靜態 IP</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>換其他 Wi-Fi 型號測試結果</label>
+          <select id="wifi_swap">
+            <option value="">請選擇 / 未測試</option>
+            <option>是，換其他型號同樣異常</option>
+            <option>否，換其他型號正常</option>
+            <option>未測試</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="mdm-detail" class="mdm-block">
+        <div class="wifi-block-title">&#x1F4BB; MDM 詳細資訊</div>
+        <div class="field">
+          <label>MDM 平台</label>
+          <select id="mdm_platform" onchange="toggleMdmOther(this.value)">
+            <option value="">請選擇</option>
+            <option value="MyViewBoard Manager">MyViewBoard Manager</option>
+            <option value="SureMDM">SureMDM</option>
+            <option value="MS Intune">MS Intune</option>
+            <option value="other">其他（自行輸入）</option>
+          </select>
+        </div>
+        <div id="mdm-other-row" style="display:none" class="field">
+          <label>其他 MDM 平台</label>
+          <input type="text" id="mdm_other" placeholder="請輸入 MDM 平台名稱"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- C -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">C.&nbsp; 問題分類</span>
+    <span class="sbadge sbadge-req">必填</span>
+  </div>
+  <div class="fields">
+    <div class="field full">
+      <label>主分類 <span class="req">*</span></label>
+      <div class="cat-grid">
+        <div class="cat-card" data-cat="inquiry" onclick="selectCat(this)">
+          <div class="cat-card-title">功能詢問與反饋</div>
+          <div class="cat-card-desc">詢問功能怎麼使用，或提供產品反饋</div>
+        </div>
+        <div class="cat-card" data-cat="hardware" onclick="selectCat(this)">
+          <div class="cat-card-title">硬體功能失效</div>
+          <div class="cat-card-desc">Touch、喇叭、Panel、玻璃、不開機、沒電源</div>
+        </div>
+        <div class="cat-card" data-cat="system" onclick="selectCat(this)">
+          <div class="cat-card-title">系統問題</div>
+          <div class="cat-card-desc">當機、功能不正確</div>
+        </div>
+        <div class="cat-card" data-cat="software" onclick="selectCat(this)">
+          <div class="cat-card-title">VS 軟體問題</div>
+          <div class="cat-card-desc">MyViewBoard、Manager、AirSync、vCast</div>
+        </div>
+      </div>
+      <input type="hidden" id="cat_selected" value=""/>
+      <div class="cat-required-hint" id="cat-required-hint">&#9888; 請選擇一個問題分類</div>
+    </div>
+
+    <div id="sub-hardware" class="sub-block field full">
+      <div class="sub-label">硬體失效項目</div>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" name="hw" value="Touch"/> Touch</label>
+        <label class="cb-item"><input type="checkbox" name="hw" value="喇叭"/> 喇叭</label>
+        <label class="cb-item"><input type="checkbox" name="hw" value="Panel"/> Panel</label>
+        <label class="cb-item"><input type="checkbox" name="hw" value="玻璃"/> 玻璃</label>
+        <label class="cb-item"><input type="checkbox" name="hw" value="不開機"/> 不開機</label>
+        <label class="cb-item"><input type="checkbox" name="hw" value="沒電源"/> 沒電源</label>
+        <label class="cb-item"><input type="checkbox" name="hw" value="hw_other" id="hw_other_cb" onchange="toggleHwOther()"/> 其他</label>
+      </div>
+      <div id="hw-other-row" style="display:none">
+        <input type="text" id="hw_other_text" placeholder="請描述其他硬體問題" style="margin-top:6px"/>
+      </div>
+    </div>
+
+    <div id="sub-system" class="sub-block field full">
+      <div class="sub-label">系統問題項目</div>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" name="sys" value="當機"/> 當機</label>
+        <label class="cb-item"><input type="checkbox" name="sys" value="功能不正確"/> 功能不正確</label>
+        <label class="cb-item"><input type="checkbox" name="sys" value="sys_other" id="sys_other_cb" onchange="toggleSysOther()"/> 其他</label>
+      </div>
+      <div id="sys-other-row" style="display:none">
+        <input type="text" id="sys_other_text" placeholder="請描述其他系統問題" style="margin-top:6px"/>
+      </div>
+    </div>
+
+    <div id="sub-software" class="sub-block field full">
+      <div class="sub-label">相關軟體</div>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" name="sw" value="MyViewBoard"/> MyViewBoard</label>
+        <label class="cb-item"><input type="checkbox" name="sw" value="Manager"/> Manager</label>
+        <label class="cb-item"><input type="checkbox" name="sw" value="AirSync"/> AirSync</label>
+        <label class="cb-item"><input type="checkbox" name="sw" value="vCast"/> vCast</label>
+        <label class="cb-item"><input type="checkbox" name="sw" value="sw_other" id="sw_other_cb" onchange="toggleSwOther()"/> 其他</label>
+      </div>
+      <div id="sw-other-row" style="display:none">
+        <input type="text" id="sw_other_text" placeholder="請輸入軟體名稱" style="margin-top:6px"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- D -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">D.&nbsp; 問題描述 &amp; 重現步驟</span>
+    <span class="sbadge sbadge-req">必填</span>
+  </div>
+  <div class="fields">
+    <div class="field full">
+      <label>問題現象描述 <span class="req">*</span></label>
+      <textarea id="symptom" placeholder="具體描述看到的異常現象，例如：使用白板 App 書寫約 5 分鐘後，App 閃退並回到主畫面"></textarea>
+    </div>
+    <div class="field full">
+      <label>發生頻率 <span class="req">*</span></label>
+      <select id="frequency">
+        <option value="">請選擇</option>
+        <option>必現 (100%)</option>
+        <option>偶發 (每天多次)</option>
+        <option>偶發 (每週數次)</option>
+        <option>偶發 (難以預測)</option>
+        <option>只發生一次</option>
+      </select>
+    </div>
+    <div class="field full">
+      <label>重現步驟 <span class="req">*</span></label>
+      <textarea id="repro" placeholder="請條列步驟，例如：&#10;1. 開機進入主畫面&#10;2. 點選 ViewBoard App&#10;3. 新建白板並書寫&#10;4. 約 5 分鐘後點選儲存&#10;5. App 閃退"></textarea>
+      <span class="hint">步驟越詳細，FAE 越能快速重現問題</span>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>是否可穩定重現</label>
+        <select id="reproducible">
+          <option value="">請選擇</option>
+          <option>是，步驟如上即可重現</option>
+          <option>否，偶發難以重現</option>
+          <option>在特定條件下可重現</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>出廠設定重置後是否仍發生</label>
+        <select id="factory_reset">
+          <option value="">請選擇 / 未測試</option>
+          <option>是，仍發生</option>
+          <option>否，重置後正常</option>
+          <option>未測試</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- E -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">E.&nbsp; L1 / L2 已執行檢測項目</span>
+    <span class="sbadge sbadge-opt">選填</span>
+  </div>
+  <div class="fields">
+    <div class="field full">
+      <label>L1 已確認項目</label>
+      <table class="checklist-table">
+        <tbody>
+          <tr><td><input type="checkbox" id="l1_reboot" style="width:14px;height:14px;accent-color:#378add"/></td><td>重新開機 / 電源重置</td><td style="width:76px"><span class="level-badge lv-l1">L1</span></td></tr>
+          <tr><td><input type="checkbox" id="l1_cable" style="width:14px;height:14px;accent-color:#378add"/></td><td>重新插拔所有外接線材</td><td><span class="level-badge lv-l1">L1</span></td></tr>
+          <tr><td><input type="checkbox" id="l1_input" style="width:14px;height:14px;accent-color:#378add"/></td><td>切換輸入源測試 (Android / HDMI / OPS)</td><td><span class="level-badge lv-l1">L1</span></td></tr>
+          <tr><td><input type="checkbox" id="l1_volume" style="width:14px;height:14px;accent-color:#378add"/></td><td>確認音量設定 / 靜音狀態</td><td><span class="level-badge lv-l1">L1</span></td></tr>
+          <tr><td><input type="checkbox" id="l1_remote" style="width:14px;height:14px;accent-color:#378add"/></td><td>遙控器電池與功能確認</td><td><span class="level-badge lv-l1">L1</span></td></tr>
+          <tr><td><input type="checkbox" id="l1_fw_ver" style="width:14px;height:14px;accent-color:#378add"/></td><td>確認 FW 版本（截圖 Settings → About）</td><td><span class="level-badge lv-l1">L1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="field full">
+      <label>L2 已執行項目</label>
+      <table class="checklist-table">
+        <tbody>
+          <tr><td><input type="checkbox" id="l2_factory" style="width:14px;height:14px;accent-color:#378add"/></td><td>出廠設定重置 (Factory Reset)</td><td style="width:76px"><span class="level-badge lv-l2">L2</span></td></tr>
+          <tr><td><input type="checkbox" id="l2_ota" style="width:14px;height:14px;accent-color:#378add"/></td><td>嘗試 OTA 更新至最新版本</td><td><span class="level-badge lv-l2">L2</span></td></tr>
+          <tr><td><input type="checkbox" id="l2_swap_unit" style="width:14px;height:14px;accent-color:#378add"/></td><td>更換備用機測試（問題是否跟機器走）</td><td><span class="level-badge lv-l2">L2</span></td></tr>
+          <tr><td><input type="checkbox" id="l2_swap_cable" style="width:14px;height:14px;accent-color:#378add"/></td><td>更換訊號線 / 電源線測試</td><td><span class="level-badge lv-l2">L2</span></td></tr>
+          <tr><td><input type="checkbox" id="l2_isolate" style="width:14px;height:14px;accent-color:#378add"/></td><td>移除所有外接設備後獨立測試</td><td><span class="level-badge lv-l2">L2</span></td></tr>
+          <tr><td><input type="checkbox" id="l2_bugreport" style="width:14px;height:14px;accent-color:#378add"/></td><td>已收集 Android Bugreport / logcat</td><td><span class="level-badge lv-l2">L2</span></td></tr>
+          <tr><td><input type="checkbox" id="l2_video" style="width:14px;height:14px;accent-color:#378add"/></td><td>已錄製問題重現影片</td><td><span class="level-badge lv-both">L1/L2</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="field full">
+      <label>測試結果補充說明</label>
+      <textarea id="test_note" style="min-height:56px" placeholder="例如：出廠重置後問題消失，但重新安裝 App 後再次發生；更換備用機後無此問題，懷疑為該批次硬體問題"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- F -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">F.&nbsp; 附件 &amp; Log 清單</span>
+    <span class="sbadge sbadge-opt">建議附上</span>
+  </div>
+  <div class="fields">
+    <div class="field full">
+      <label>已備齊的附件（勾選）</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="att_photo"/> 問題照片 / 影片</label>
+        <label class="cb-item"><input type="checkbox" id="att_bug"/> Android Bugreport (.zip)</label>
+        <label class="cb-item"><input type="checkbox" id="att_logcat"/> 系統 logcat</label>
+        <label class="cb-item"><input type="checkbox" id="att_ota"/> OTA 更新 Log</label>
+        <label class="cb-item"><input type="checkbox" id="att_crash"/> App Crash Log</label>
+        <label class="cb-item"><input type="checkbox" id="att_screen"/> 設定畫面截圖</label>
+        <label class="cb-item"><input type="checkbox" id="att_network"/> 網路封包截圖</label>
+      </div>
+      <span class="note">Log 擷取：Settings → About → Bug Report 或 ADB logcat -d</span>
+    </div>
+    <div class="field full">
+      <label>附件連結</label>
+      <input type="text" id="attach_link" placeholder="Google Drive / OneDrive 分享連結"/>
+    </div>
+  </div>
+</div>
+
+<!-- G -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">G.&nbsp; 業務影響說明</span>
+    <span class="sbadge sbadge-opt">選填</span>
+  </div>
+  <div class="fields">
+    <div class="field full">
+      <textarea id="biz_impact" style="min-height:56px" placeholder="例如：客戶為大型教育採購案，共 200 台，問題影響正式上課，要求盡速回覆"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="section" style="border-radius:12px">
+  <div class="footer">
+    <span class="footer-note">填寫完成後點擊「產生 Email 內容」，複製後貼至郵件發送給 BU FAE</span>
+    <div class="btns">
+      <button class="btn" onclick="clearForm()">清除全部</button>
+      <button class="btn btn-primary" onclick="generateEmail()">產生 Email 內容 ▶</button>
+    </div>
+  </div>
+  <div style="padding:0 20px 16px">
+    <div id="copy-box" class="copy-box"></div>
+    <div class="copy-row" id="copy-row">
+      <button class="btn btn-primary" onclick="copyEmail()" style="font-size:12px;padding:6px 16px">&#x2398; 複製全部</button>
+      <span class="copied-msg" id="copied-msg">&#10003; 已複製！</span>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+function v(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function selText(id){var e=document.getElementById(id);return e&&e.selectedIndex>=0?e.options[e.selectedIndex].text:'';}
+
+function selectCat(card){
+  document.querySelectorAll('.cat-card').forEach(function(c){c.classList.remove('selected');});
+  card.classList.add('selected');
+  var cat=card.getAttribute('data-cat');
+  document.getElementById('cat_selected').value=cat;
+  document.getElementById('cat-required-hint').style.display='none';
+  ['hardware','system','software'].forEach(function(t){
+    var el=document.getElementById('sub-'+t);
+    if(el)el.style.display=(cat===t)?'flex':'none';
+  });
+}
+
+function toggleWifi(){document.getElementById('wifi-detail').style.display=document.getElementById('net_wifi').checked?'flex':'none';}
+function toggleMdm(){document.getElementById('mdm-detail').style.display=document.getElementById('net_mdm').checked?'flex':'none';}
+function togglePowerOther(v){document.getElementById('power-other-row').style.display=(v==='other')?'block':'none';}
+function toggleWifiOther(v){document.getElementById('wifi-other-row').style.display=(v==='other')?'block':'none';}
+function toggleMdmOther(v){document.getElementById('mdm-other-row').style.display=(v==='other')?'block':'none';}
+function toggleHwOther(){document.getElementById('hw-other-row').style.display=document.getElementById('hw_other_cb').checked?'block':'none';}
+function toggleSysOther(){document.getElementById('sys-other-row').style.display=document.getElementById('sys_other_cb').checked?'block':'none';}
+function toggleSwOther(){document.getElementById('sw-other-row').style.display=document.getElementById('sw_other_cb').checked?'block':'none';}
+
+function getPower(){var val=v('power');return val==='other'?(v('power_other')||'(未填)'):val||'(未選)';}
+function getWifiModel(){var val=v('wifi_model');return val==='other'?(v('wifi_other')||'(未填)'):val||'(未選)';}
+function getMdmPlatform(){var val=v('mdm_platform');return val==='other'?(v('mdm_other')||'(未填)'):val||'(未選)';}
+
+function getNetEnv(){
+  var map={net_eth:'有線 Ethernet',net_wifi:'Wi-Fi',net_none:'無網路',net_mdm:'MDM 管理',net_proxy:'企業 Proxy',net_fw:'防火牆限制'};
+  var items=[];
+  Object.keys(map).forEach(function(k){var e=document.getElementById(k);if(e&&e.checked)items.push(map[k]);});
+  return items.join('、')||'(未勾選)';
+}
+
+function getCheckedVals(name){
+  var vals=[];
+  document.querySelectorAll('input[name="'+name+'"]:checked').forEach(function(cb){if(cb.value!==name+'_other')vals.push(cb.value);});
+  return vals;
+}
+
+function getCatLabel(){var map={inquiry:'功能詢問與反饋',hardware:'硬體功能失效',system:'系統問題',software:'VS 軟體問題'};return map[v('cat_selected')]||'';}
+
+function getCatDetail(){
+  var cat=v('cat_selected');
+  var nameMap={'hw':'hardware','sys':'system','sw':'software'};
+  var cbMap={'hw':'hw_other_cb','sys':'sys_other_cb','sw':'sw_other_cb'};
+  var txtMap={'hw':'hw_other_text','sys':'sys_other_text','sw':'sw_other_text'};
+  var catToName={hardware:'hw',system:'sys',software:'sw'};
+  var n=catToName[cat];
+  if(!n)return '';
+  var items=getCheckedVals(n);
+  var ocb=document.getElementById(cbMap[n]);
+  if(ocb&&ocb.checked){var ot=v(txtMap[n]);if(ot)items.push(ot);}
+  return items.join('、');
+}
+
+function getAttachments(){
+  var map={att_photo:'問題照片/影片',att_bug:'Android Bugreport',att_logcat:'系統 logcat',att_ota:'OTA 更新 Log',att_crash:'App Crash Log',att_screen:'設定畫面截圖',att_network:'網路封包截圖'};
+  var items=[];
+  Object.keys(map).forEach(function(k){var e=document.getElementById(k);if(e&&e.checked)items.push(map[k]);});
+  return items.join('、')||'(未勾選)';
+}
+
+function getL1(){
+  var ids=['l1_reboot','l1_cable','l1_input','l1_volume','l1_remote','l1_fw_ver'];
+  var labels=['重新開機/電源重置','重新插拔外接線材','切換輸入源測試','確認音量/靜音狀態','遙控器確認','確認 FW 版本截圖'];
+  return ids.map(function(id,i){var e=document.getElementById(id);return(e&&e.checked?'[v] ':'[ ] ')+labels[i];}).join('\n  ');
+}
+
+function getL2(){
+  var ids=['l2_factory','l2_ota','l2_swap_unit','l2_swap_cable','l2_isolate','l2_bugreport','l2_video'];
+  var labels=['出廠設定重置','嘗試 OTA 更新','更換備用機測試','更換訊號線/電源線','移除外接設備獨立測試','收集 Android Bugreport/logcat','錄製問題重現影片'];
+  return ids.map(function(id,i){var e=document.getElementById(id);return(e&&e.checked?'[v] ':'[ ] ')+labels[i];}).join('\n  ');
+}
+
+function generateEmail(){
+  if(!v('cat_selected')){
+    var hint=document.getElementById('cat-required-hint');
+    hint.style.display='block';
+    hint.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  var catLabel=getCatLabel();
+  var catDetail=getCatDetail();
+  var showWifi=document.getElementById('net_wifi').checked;
+  var showMdm=document.getElementById('net_mdm').checked;
+
+  var lines=[
+'主旨：【IFP 技術問題回報】'+catLabel+' — '+v('model'),
+'',
+'Dear BU FAE Team,',
+'',
+'以下為標準化技術問題回報，請協助評估並回覆，謝謝。',
+'',
+'═══════════════════════════════════════',
+'【A. 機器基本資訊】',
+'═══════════════════════════════════════',
+'Model Name / P/N  : '+v('model'),
+'Serial Number     : '+v('sn'),
+'FW 版本           : '+v('fw'),
+'Android / OS Build: '+v('os'),
+'學校 / 公司       : '+v('location'),
+'國家 / 城市       : '+v('region'),
+'影響台數          :',
+v('unit_count')||'(未填)',
+'',
+'═══════════════════════════════════════',
+'【B. 客戶環境資訊】',
+'═══════════════════════════════════════',
+'安裝場景    : '+selText('scene'),
+'安裝方式    : '+selText('install'),
+'電源規格    : '+getPower(),
+'OPS 型號    : '+v('ops'),
+'外接設備    : '+v('periph'),
+'網路環境    : '+getNetEnv(),
+  ];
+
+  if(showWifi){
+    lines.push('');
+    lines.push('  [Wi-Fi 詳細]');
+    lines.push('  Wi-Fi 型號  : '+getWifiModel());
+    lines.push('  Wi-Fi 頻段  : '+selText('wifi_band'));
+    lines.push('  AP / Router : '+v('ap_model'));
+    lines.push('  IP 取得方式 : '+selText('ip_mode'));
+    lines.push('  換型號測試  : '+selText('wifi_swap'));
+  }
+  if(showMdm){
+    lines.push('');
+    lines.push('  [MDM 詳細]');
+    lines.push('  MDM 平台    : '+getMdmPlatform());
+  }
+
+  lines=lines.concat([
+'',
+'═══════════════════════════════════════',
+'【C. 問題分類】',
+'═══════════════════════════════════════',
+'主分類      : '+catLabel,
+catDetail?'細項        : '+catDetail:'',
+'',
+'═══════════════════════════════════════',
+'【D. 問題描述 & 重現步驟】',
+'═══════════════════════════════════════',
+'問題現象：',
+v('symptom')||'(未填)',
+'',
+'發生頻率      : '+selText('frequency'),
+'是否可穩定重現: '+selText('reproducible'),
+'出廠重置後    : '+selText('factory_reset'),
+'',
+'重現步驟：',
+v('repro')||'(未填)',
+'',
+'═══════════════════════════════════════',
+'【E. L1 / L2 已執行檢測項目】',
+'═══════════════════════════════════════',
+'L1 已確認項目：',
+'  '+getL1(),
+'',
+'L2 已執行項目：',
+'  '+getL2(),
+'',
+'測試補充說明：',
+v('test_note')||'(未填)',
+'',
+'═══════════════════════════════════════',
+'【F. 附件清單】',
+'═══════════════════════════════════════',
+'已附檔案    : '+getAttachments(),
+'附件連結    : '+v('attach_link'),
+  ]);
+
+  var biz=v('biz_impact');
+  if(biz){lines=lines.concat(['','═══════════════════════════════════════','【G. 業務影響說明】','═══════════════════════════════════════',biz]);}
+  lines=lines.concat(['','Best regards,','L1/L2 Support Team']);
+
+  var content=lines.filter(function(l){return l!==undefined;}).join('\n');
+  var box=document.getElementById('copy-box');
+  var row=document.getElementById('copy-row');
+  box.textContent=content;
+  box.style.display='block';
+  row.style.display='flex';
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  window._emailContent=content;
+}
+
+function copyEmail(){
+  if(!window._emailContent)return;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(window._emailContent).then(showCopied);
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=window._emailContent;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showCopied();
+  }
+}
+
+function showCopied(){
+  var m=document.getElementById('copied-msg');
+  m.style.display='inline';
+  setTimeout(function(){m.style.display='none';},2500);
+}
+
+function clearForm(){
+  document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(function(e){e.value='';});
+  document.querySelectorAll('select').forEach(function(e){e.selectedIndex=0;});
+  document.querySelectorAll('input[type=checkbox]').forEach(function(e){e.checked=false;});
+  document.querySelectorAll('.cat-card').forEach(function(c){c.classList.remove('selected');});
+  document.getElementById('cat_selected').value='';
+  document.getElementById('cat-required-hint').style.display='none';
+  ['hardware','system','software'].forEach(function(t){var el=document.getElementById('sub-'+t);if(el)el.style.display='none';});
+  ['wifi-detail','mdm-detail','wifi-other-row','mdm-other-row','hw-other-row','sys-other-row','sw-other-row','power-other-row'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  document.getElementById('copy-box').style.display='none';
+  document.getElementById('copy-row').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
